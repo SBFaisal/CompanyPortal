@@ -1,20 +1,26 @@
 export class Employee {
-    employeeId: number
+    employeeId: string
     employeeName: string
     contactNo: string
     emailId: string
-    deptId: number
+    departmentId: string
+    departmentName: string
+    projectId: string
+    projectName: string
     password: string
     gender: string
     role: string
     createdDate: string
 
     constructor(){
-        this.employeeId = 0,
+        this.employeeId = '',
         this.employeeName = '',
         this.contactNo = '',
         this.emailId = '',
-        this.deptId = 0,
+        this.departmentId = '',
+        this.departmentName = '',
+        this.projectId = '',
+        this.projectName = '',
         this.password = '',
         this.gender = '',
         this.role = '',
