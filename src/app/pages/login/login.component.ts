@@ -19,7 +19,7 @@ export class LoginComponent {
   }
 
   onLogin(){
-    if(this.loginObj.username == "user" && this.loginObj.password == "123"){
+    if(this.loginObj.username == "admin" && this.loginObj.password == "admin"){
       this.router.navigateByUrl('dashboard')
     } else{
       alert("wrong credentials.")

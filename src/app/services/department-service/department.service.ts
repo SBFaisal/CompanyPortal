@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IApiResponse } from '../../model/interface/DepartmentInterface';
+import { IApiResponse, IDeparment } from '../../model/interface/DepartmentInterface';
 
 @Injectable({
   providedIn: 'root'
@@ -9,12 +9,12 @@ import { IApiResponse } from '../../model/interface/DepartmentInterface';
 export class DepartmentService {
   constructor(private http: HttpClient) { }
   
-  baseUrl: string = "https://projectapi.gerasim.in/api/EmployeeManagement/"
-  getAllParentDepartment(): Observable<IApiResponse>{
-    return this.http.get<IApiResponse>(this.baseUrl+"GetParentDepartment");
+  baseUrl: string = "https://localhost:7238/api/Department/"
+  getAllParentDepartment(): Observable<IDeparment[]>{
+    return this.http.get<IDeparment[]>(this.baseUrl+"GetAllParentDepartments");
   }
 
-  getChildDepartmentsByParentId(id: number): Observable<IApiResponse>{
-    return this.http.get<IApiResponse>(`${this.baseUrl}getChildDepartmentsByParentId?deptId=${id}`);
+  getChildDepartmentsByParentId(id: number): Observable<IDeparment[]>{
+    return this.http.get<IDeparment[]>(`${this.baseUrl}GetChildDepartmentsByParentId/${id}`);
   }
 }

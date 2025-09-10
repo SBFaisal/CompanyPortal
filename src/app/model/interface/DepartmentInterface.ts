@@ -4,17 +4,10 @@ export interface IApiResponse{
     data: any
 }
 
-export interface IParentDeparment{
-    departmentId: number,
-    departmentName: boolean,
+export interface IDeparment{
+    id: string,
+    departmentName: string,
     departmentLogo: string
 }
-
-export interface IChildDeparment{
-    childDeptId: number,
-    parentDeptId: number,
-    departmentName: boolean
-}
-
 
 
