@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Employee } from '../../model/class/EmployeeClass';
-import { IApiResponse } from '../../model/interface/DepartmentInterface';
+import { Employee } from '../../model/requestModels/EmployeeClass';
 import { Observable, of } from 'rxjs';
+import { IEmployee } from '../../model/responseModels/IEmployee';
 
 @Injectable({
   providedIn: 'root'
@@ -12,13 +12,33 @@ export class EmployeeService {
   constructor(private http: HttpClient) { }
     
     baseUrl: string = "https://localhost:7238/api/Employee/"
+
+    // Get All Employees
+    GetAllEmployees(){
+      return this.http.get<IEmployee[]>(`${this.baseUrl}GetAllEmployees`)
+    }
+
+    // Get Employee by ID
+    GetEmployeeById(employeeId: string): Observable<IEmployee>{
+      return this.http.get<IEmployee>(`${this.baseUrl}GetEmployee?id=${employeeId}`);
+    }
+
+    // Add Employee
     CreateEmployee(employee: Employee): Observable<boolean>{
-      employee.createdDate = new Date().toISOString();
-      employee.projectId = "3fa85f64-5717-4562-abcd-2c963f667777"
-      debugger;
       const fullUrl = `${this.baseUrl}AddEmployee`
       return this.http.post<boolean>(fullUrl, employee);
     }
+    
+    // Update Employee
+    UpdateEmployee(employee: Employee, employeeId: string): Observable<boolean>{
+      return this.http.post<boolean>(`${this.baseUrl}UpdateEmployee?id=${employeeId}`, employee);
+    }
+
+    // Delete Employee
+    DeleteEmployee(employeeId: string){
+      return this.http.delete<boolean>(`${this.baseUrl}DeleteEmployee/${employeeId}`);
+    }
+
     // private employees: Employee[] = [
     //   {
     //     employeeId: "4542",
@@ -47,12 +67,4 @@ export class EmployeeService {
     //     "createdDate": "2024-12-25T00:00:00"
     //   }
     // ];
-    GetAllEmployees(){
-      //return of(this.employees);
-      return this.http.get<Employee[]>(`${this.baseUrl}GetAllEmployees`)
-    }
-
-    DeleteEmployee(id: number){
-      // Delete Employee
-    }
 }

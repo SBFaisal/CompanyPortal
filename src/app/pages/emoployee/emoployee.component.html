@@ -28,9 +28,9 @@
                 <input type="text" class="form-control" [(ngModel)]="employeeObj.emailId" name="email"
                     placeholder="Enter Email">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6" >
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" [(ngModel)]="employeeObj.password" name="password"
+                <input [disabled]="isEditMode" type="password" class="form-control" [(ngModel)]="employeeObj.password" name="password"
                     placeholder="Enter Password">
             </div>
         </div>
@@ -38,9 +38,9 @@
             <div class="col-md-6">
                 <label for="gender" class="form-label">Gender</label>
                 <select type="text" class="form-select" name="gender" [(ngModel)]="employeeObj.gender">
-                    <option selected> Select Gender</option>
-                    <option>Male</option>
-                    <option>Female</option>
+                    <option value="null"> Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
                 </select>
             </div>
             <div class="col-md-6">
@@ -52,29 +52,22 @@
                     }
                 </select>
             </div>
-        </div>
-        <div class="row">
             <div class="col-md-6">
-                <label for="parentDepartment" class="form-label">Parent Department</label>
-                <select type="text" class="form-select" name="parentDepartmentId" [(ngModel)]="parentDepartmentId"
-                    (change)="onParentDepartmentChange()">
-                    <option selected>Select Parent Department</option>
-                    @for (item of parentDepartmentList(); track $index) {
-                    <option [value]="item.id">{{item.departmentName}}</option>
-                    }
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label for="childDepartment" class="form-label">Child Department</label>
+                <label for="childDepartment" class="form-label">Department</label>
                 <select type="text" class="form-select" [(ngModel)]="employeeObj.departmentId" name="deptId">
-                    <option selected> Select Child Department</option>
-                    @for (item of childDepartmentList(); track $index) {
+                    <option selected> Select Department</option>
+                    @for (item of departmentList(); track $index) {
                     <option [value]="item.id">{{item.departmentName}}</option>
                     }
                 </select>
             </div>
         </div>
-        <button type="button" class="btn btn-success mt-3" (click)="onSave()"> Submit </button>
+        @if (isEditMode){
+            <button type="button" class="btn btn-success mt-3" (click)="onUpdate()"> Update </button>
+        }
+        @else{
+            <button type="button" class="btn btn-success mt-3" (click)="onSave()"> Submit </button>
+        }
         <button type="button" class="btn btn-outline-secondary mt-3 ms-3" (click)="isFormVisible.set(false)"> Cancel</button>
     </form>
     }
@@ -100,12 +93,12 @@
                 <td>{{item.contactNo}}</td>
                 <td>{{item.emailId}}</td>
                 <td>{{item.departmentName}}</td>
-                <td>{{item.projectName}}</td>
+                <td>{{item.projectName === null || item.projectName === undefined || item.projectName.trim() === '' ? 'NA' : item.projectName}}</td>
                 <td>{{item.role}}</td>
                 <td>{{item.gender}}</td>
                 <td>
-                    <button class="btn btn-outline-secondary" (click)="onEdit()">Edit</button>
-                    <button class="ms-3 btn btn-outline-danger" (click)="onDelete()">Delete</button>
+                    <button class="btn btn-outline-secondary" (click)="onEdit(item)">Edit</button>
+                    <button class="ms-3 btn btn-outline-danger" (click)="onDelete(item.employeeId)">Delete</button>
                 </td>
             </tr>
             }
