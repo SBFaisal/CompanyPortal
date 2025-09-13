@@ -1,1 +1,84 @@
-<p>project works!</p>
+<div class="tab-pane fade show active" id="Projects" role="tabpanel">
+    <div class="row">
+        <div class="col-6">
+            <h2>Projects</h2>
+        </div>
+        <div class="col-6 text-end">
+            <button class="btn btn-success" (click)="isFormVisible.set(true)"> Add New</button>
+        </div>
+    </div>
+    <!-- Project Form -->
+    @if (isFormVisible()) {
+    <form class="mb-4">
+        <div class="row">
+            <div class="col-md-6">
+                <label for="ProjectName" class="form-label">Project Name</label>
+                <input type="text" class="form-control" [(ngModel)]="projectObj.ProjectName" name="ProjectName"
+                    placeholder="Enter Project Name">
+            </div>
+            <div class="col-md-6">
+                <label for="ClientName" class="form-label">Client Name</label>
+                <input type="text" class="form-control" [(ngModel)]="projectObj.ClientName" name="ClientName"
+                    placeholder="Client Name">
+            </div>
+        </div>       
+        <div class="row">
+            <div class="col-md-6">
+                <label for="childDepartment" class="form-label">Department</label>
+                <select type="text" class="form-select" [(ngModel)]="projectObj.DepartmentId" name="DepartmentId">
+                    <option selected> Select Department</option>
+                    @for (item of departmentList(); track $index) {
+                    <option [value]="item.Id">{{item.DepartmentName}}</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="role" class="form-label">Lead By</label>
+                <select type="text" class="form-select" name="role" [(ngModel)]="projectObj.LeadByEmployeeId" name="LeadByEmployeeId">
+                    <option selected>Select Employee</option>
+                    @for (item of employeeList(); track $index) {
+                    <option [value]="item.employeeId">{{item.employeeName}}</option>
+                    }
+                </select>
+            </div>
+        </div>
+        @if (isEditMode){
+            <button type="button" class="btn btn-success mt-3" (click)="onUpdate()"> Update </button>
+        }
+        @else{
+            <button type="button" class="btn btn-success mt-3" (click)="onSave()"> Submit </button>
+        }
+        
+        <button type="button" class="btn btn-outline-secondary mt-3 ms-3" (click)="isFormVisible.set(false)"> Cancel</button>
+    </form>
+    }
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>ClientName</th>
+                <th>LeadBy</th>
+                <th>Department</th>
+                <th>StartDate</th>
+                <th>EndDate</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (item of projectList(); track $index) {
+            <tr>
+                <td>{{item.projectName}}</td>
+                <td>{{item.clientName}}</td>
+                <td>{{item.leadByEmployee}}</td>
+                <td>{{item.department}}</td>
+                <td>{{item.startDate}}</td>
+                <td>{{item.endDate}}</td>
+                <td>
+                    <button class="btn btn-outline-secondary" (click)="onEdit(item)">Edit</button>
+                    <button class="ms-3 btn btn-outline-danger" (click)="onDelete(item.id)">Delete</button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

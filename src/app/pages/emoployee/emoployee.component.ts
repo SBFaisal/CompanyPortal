@@ -1,10 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { DepartmentService } from '../../services/department-service/department.service';
-import { IApiResponse, IDeparment } from '../../model/interface/DepartmentInterface';
 import { FormsModule } from '@angular/forms';
-import { Employee } from '../../model/class/EmployeeClass';
+import { Employee } from '../../model/requestModels/EmployeeClass';
 import { EmployeeService } from '../../services/employee-service/employee.service';
 import { Designation } from '../constants/Designations';
+import { IEmployee } from '../../model/responseModels/IEmployee';
+import { IDepartment } from '../../model/responseModels/IDepartment';
 
 @Component({
   selector: 'app-emoployee',
@@ -17,55 +18,80 @@ export class EmoployeeComponent implements OnInit{
   
   departmentService = inject(DepartmentService);
   employeeService = inject(EmployeeService);
+
   isFormVisible = signal<boolean>(false);
-  parentDepartmentList = signal<IDeparment[]>([]);
-  childDepartmentList = signal<IDeparment[]>([]);
+  departmentList = signal<IDepartment[]>([]);
   designations = signal<string[]>([]);
-  employeeList = signal<Employee[]>([]);
+  employeeList = signal<IEmployee[]>([]);
 
-  parentDepartmentId: number = 0
+  isEditMode = false;
 
-  employeeObj: Employee = new Employee();
+  employeeObj: Employee = new Employee()
+  employeeIdToDelete: string = ''
+
   ngOnInit(): void {
     this.designations.set(Designation.roles)
-    this.getParentAllDepartments();
+    this.getAllDepartments();
     this.getAllEmployees();
   }
 
-  getParentAllDepartments(){
-    this.departmentService.getAllParentDepartment().subscribe((res:IDeparment[]) =>{
-      this.parentDepartmentList.set(res)
-    })
-  }
-
-  onParentDepartmentChange(){
-    this.departmentService.getChildDepartmentsByParentId(this.parentDepartmentId).subscribe((res: IDeparment[]) =>{
-      this.childDepartmentList.set(res)
+  getAllDepartments(){
+    this.departmentService.GetAllDepartments().subscribe((res:IDepartment[]) =>{
+      this.departmentList.set(res)
     })
   }
 
   onSave(){
     this.employeeService.CreateEmployee(this.employeeObj).subscribe((res: boolean) =>{
+      this.isFormVisible.set(false)
       alert("Empoyee Created")
       this.getAllEmployees()
       this.employeeObj = new Employee()
     }, error => {
-
+      alert("Error while creating employee")
     })
   }
 
   getAllEmployees(){
-    this.employeeService.GetAllEmployees().subscribe((res: Employee[]) =>{
+    this.employeeService.GetAllEmployees().subscribe((res: IEmployee[]) =>{
       this.employeeList.set(res)
-      debugger;
     })
   }
 
-  onEdit(){
-
+  onEdit(employee: IEmployee){
+    debugger;
+    this.isFormVisible.set(true)
+    this.isEditMode = true
+    this.employeeIdToDelete = employee.employeeId
+    this.employeeObj = {
+      employeeName: employee.employeeName,
+      contactNo: employee.contactNo,
+      emailId: employee.emailId,
+      password: '123456789',
+      gender: employee.gender,
+      role: employee.role,
+      departmentId: this.departmentList().find(x => x.DepartmentName === employee.departmentName)?.Id.toString() || ''
+    }
   }
 
-  onDelete(){
+  onUpdate(){
+    debugger
+        this.employeeService.UpdateEmployee(this.employeeObj, this.employeeIdToDelete).subscribe((res: boolean) =>{
+          this.isFormVisible.set(false)
+          alert("Employee Updated")
+          this.getAllEmployees()
+          this.employeeObj = new Employee()
+        }, error => {
+          alert("Error while updating employee")
+        })
+      }
 
+  onDelete(employeeId: string){
+    this.employeeService.DeleteEmployee(employeeId).subscribe((res: boolean) =>{
+      alert("Employee Deleted")
+      this.getAllEmployees()
+    }, error => {
+      alert("Error while deleting employee")
+    })
   }
 }

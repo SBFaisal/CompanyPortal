@@ -1,0 +1,58 @@
+
+
+<!-- app.component.html -->
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  <label>
+    Name:
+    <input type="text" formControlName="DepartmentName" name="DepartmentName">
+  </label>
+  <div *ngIf="userForm.get('DepartmentName')?.invalid && userForm.get('DepartmentName')?.touched">
+    <span class="text-danger">Name is required</span>
+  </div>
+
+  <label>
+    Logo:
+    <input type="email" formControlName="Logo" name="Logo">
+  </label>
+  <div *ngIf="userForm.get('Logo')?.invalid && userForm.get('Logo')?.touched">
+    Enter a valid email
+  </div>
+
+  <button type="submit" [disabled]="userForm.invalid">Submit</button>
+</form>
+
+
+
+<!-- <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Emp Id</th>
+                <th>Name</th>
+                <th>Contact No</th>
+                <th>Email</th>
+                <th>Department</th>
+                <th>Project</th>
+                <th>Role</th>
+                <th>Gender</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (item of employeeList(); track $index) {
+            <tr>
+                <td>{{item.employeeId}}</td>
+                <td>{{item.employeeName}}</td>
+                <td>{{item.contactNo}}</td>
+                <td>{{item.emailId}}</td>
+                <td>{{item.departmentName}}</td>
+                <td>{{item.projectName === null || item.projectName === undefined || item.projectName.trim() === '' ? 'NA' : item.projectName}}</td>
+                <td>{{item.role}}</td>
+                <td>{{item.gender}}</td>
+                <td>
+                    <button class="btn btn-outline-secondary" (click)="onEdit(item)">Edit</button>
+                    <button class="ms-3 btn btn-outline-danger" (click)="onDelete(item.employeeId)">Delete</button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table> -->
