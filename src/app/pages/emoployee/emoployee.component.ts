@@ -1,11 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { DepartmentService } from '../../services/department-service/department.service';
-import { IDeparment } from '../../model/responseModels/IDepartment';
 import { FormsModule } from '@angular/forms';
 import { Employee } from '../../model/requestModels/EmployeeClass';
 import { EmployeeService } from '../../services/employee-service/employee.service';
 import { Designation } from '../constants/Designations';
 import { IEmployee } from '../../model/responseModels/IEmployee';
+import { IDepartment } from '../../model/responseModels/IDepartment';
 
 @Component({
   selector: 'app-emoployee',
@@ -20,7 +20,7 @@ export class EmoployeeComponent implements OnInit{
   employeeService = inject(EmployeeService);
 
   isFormVisible = signal<boolean>(false);
-  departmentList = signal<IDeparment[]>([]);
+  departmentList = signal<IDepartment[]>([]);
   designations = signal<string[]>([]);
   employeeList = signal<IEmployee[]>([]);
 
@@ -36,7 +36,7 @@ export class EmoployeeComponent implements OnInit{
   }
 
   getAllDepartments(){
-    this.departmentService.GetAllDepartment().subscribe((res:IDeparment[]) =>{
+    this.departmentService.GetAllDepartments().subscribe((res:IDepartment[]) =>{
       this.departmentList.set(res)
     })
   }
@@ -70,7 +70,7 @@ export class EmoployeeComponent implements OnInit{
       password: '123456789',
       gender: employee.gender,
       role: employee.role,
-      departmentId: this.departmentList().find(x => x.departmentName === employee.departmentName)?.id.toString() || ''
+      departmentId: this.departmentList().find(x => x.DepartmentName === employee.departmentName)?.Id.toString() || ''
     }
   }
 
