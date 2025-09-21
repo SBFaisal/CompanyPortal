@@ -69,7 +69,6 @@ export class ProjectComponent {
     }
   
     onEdit(project: IProject){
-      debugger;
       this.isFormVisible.set(true)
       this.isEditMode = true
       this.projectIdToDelete = project.id.toString()
@@ -77,7 +76,7 @@ export class ProjectComponent {
         ProjectName: project.projectName,
         ClientName: project.clientName,
         LeadByEmployeeId: this.employeeList().find( e => e.employeeName === project.leadByEmployee)?.employeeId.toString() || '',
-        DepartmentId: this.departmentList().find(d => d.DepartmentName === project.department)?.Id.toString() || ''
+        DepartmentId: this.departmentList().find(d => d.departmentName === project.department)?.id.toString() || ''
       }
     }
 

@@ -1,58 +1,57 @@
-
-
-<!-- app.component.html -->
-<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-  <label>
-    Name:
-    <input type="text" formControlName="DepartmentName" name="DepartmentName">
-  </label>
-  <div *ngIf="userForm.get('DepartmentName')?.invalid && userForm.get('DepartmentName')?.touched">
-    <span class="text-danger">Name is required</span>
-  </div>
-
-  <label>
-    Logo:
-    <input type="email" formControlName="Logo" name="Logo">
-  </label>
-  <div *ngIf="userForm.get('Logo')?.invalid && userForm.get('Logo')?.touched">
-    Enter a valid email
-  </div>
-
-  <button type="submit" [disabled]="userForm.invalid">Submit</button>
-</form>
-
-
-
-<!-- <table class="table table-bordered">
+<div class="tab-pane fade show active" id="Projects" role="tabpanel">
+    <div class="row">
+        <div class="col-6">
+            <h2>Departments</h2>
+        </div>
+        <div class="col-6 text-end">
+            <button class="btn btn-success" (click)="isFormVisible.set(true)"> Add New</button>
+        </div>
+    </div>
+    <!-- Project Form -->
+    @if (isFormVisible()) {
+    <form class="mb-4" [formGroup]="departmentForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+            <div class="col-md-6">
+                <label for="DepartmentName" class="form-label">Department Name</label>
+                <input type="text" class="form-control" formControlName="DepartmentName" name="DepartmentName"
+                    placeholder="Enter Department Name">
+            </div>
+            <div class="col-md-6">
+                <label for="Logo" class="form-label">Logo</label>
+                <input type="text" class="form-control" formControlName="Logo" name="Logo"
+                    placeholder="Logo">
+            </div>
+        </div>       
+        @if (isEditMode){
+            <button type="button" class="btn btn-success mt-3" [disabled]="departmentForm.invalid" (click)="onUpdate()"> Update </button>
+        }
+        @else{
+            <button type="submit" class="btn btn-success mt-3" [disabled]="departmentForm.invalid"> Submit </button>
+        }
+        
+        <button type="button" class="btn btn-outline-secondary mt-3 ms-3" (click)="isFormVisible.set(false)"> Cancel</button>
+    </form>
+    }
+    <table class="table table-bordered"  style="width: 50%;">
         <thead>
             <tr>
-                <th>Emp Id</th>
-                <th>Name</th>
-                <th>Contact No</th>
-                <th>Email</th>
-                <th>Department</th>
-                <th>Project</th>
-                <th>Role</th>
-                <th>Gender</th>
+                <th>Dept Name</th>
+                <th>Logo</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @for (item of employeeList(); track $index) {
-            <tr>
-                <td>{{item.employeeId}}</td>
-                <td>{{item.employeeName}}</td>
-                <td>{{item.contactNo}}</td>
-                <td>{{item.emailId}}</td>
+            @for (item of departmentList; track item.id) {
+              <tr>
                 <td>{{item.departmentName}}</td>
-                <td>{{item.projectName === null || item.projectName === undefined || item.projectName.trim() === '' ? 'NA' : item.projectName}}</td>
-                <td>{{item.role}}</td>
-                <td>{{item.gender}}</td>
+                <td>{{item.logo}}</td>
                 <td>
                     <button class="btn btn-outline-secondary" (click)="onEdit(item)">Edit</button>
-                    <button class="ms-3 btn btn-outline-danger" (click)="onDelete(item.employeeId)">Delete</button>
+                    <button class="ms-3 btn btn-outline-danger" (click)="onDelete(item.id)">Delete</button>
                 </td>
-            </tr>
+              </tr>
             }
         </tbody>
-    </table> -->
+    </table>
+</div>
+

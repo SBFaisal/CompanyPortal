@@ -6,11 +6,12 @@ import { EmployeeService } from '../../services/employee-service/employee.servic
 import { Designation } from '../constants/Designations';
 import { IEmployee } from '../../model/responseModels/IEmployee';
 import { IDepartment } from '../../model/responseModels/IDepartment';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-emoployee',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, JsonPipe],
   templateUrl: './emoployee.component.html',
   styleUrl: './emoployee.component.css'
 })
@@ -37,7 +38,11 @@ export class EmoployeeComponent implements OnInit{
 
   getAllDepartments(){
     this.departmentService.GetAllDepartments().subscribe((res:IDepartment[]) =>{
+      debugger
+      console.log(this.departmentList());
       this.departmentList.set(res)
+    }, error => {
+      alert("Error while fetching departments")
     })
   }
 
@@ -70,7 +75,7 @@ export class EmoployeeComponent implements OnInit{
       password: '123456789',
       gender: employee.gender,
       role: employee.role,
-      departmentId: this.departmentList().find(x => x.DepartmentName === employee.departmentName)?.Id.toString() || ''
+      departmentId: this.departmentList().find(x => x.departmentName === employee.departmentName)?.id.toString() || ''
     }
   }
 

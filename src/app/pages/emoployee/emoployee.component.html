@@ -53,11 +53,11 @@
                 </select>
             </div>
             <div class="col-md-6">
-                <label for="childDepartment" class="form-label">Department</label>
-                <select type="text" class="form-select" [(ngModel)]="employeeObj.departmentId" name="deptId">
+                <label for="DepartmentName" class="form-label">Department</label>
+                <select type="text" class="form-select" [(ngModel)]="employeeObj.departmentId" name="departmentId">
                     <option selected> Select Department</option>
-                    @for (item of departmentList(); track $index) {
-                    <option [value]="item.Id">{{item.DepartmentName}}</option>
+                    @for (item of departmentList(); track item.id) {
+                    <option [value]="item.id">{{item.departmentName}}</option>
                     }
                 </select>
             </div>
