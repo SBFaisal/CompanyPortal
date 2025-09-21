@@ -14,17 +14,22 @@ import { IDepartment } from '../../model/responseModels/IDepartment';
 export class DepartmentComponent implements OnInit {
 
   constructor(private departmentService: DepartmentService, private fb: FormBuilder) {
-    this.userForm = this.fb.group({
-      DepartmentName: ['', Validators.required, Validators.minLength(5)],
+    this.departmentForm = this.fb.group({
+      DepartmentName: ['', [Validators.required, Validators.minLength(3)]],
       Logo: ['']
     })
   }
 
-  departmentList: IDepartment[] = []
-  userForm: FormGroup = {} as FormGroup;
   ngOnInit(): void {
     this.getAllDepartments();
   }
+
+  departmentList: IDepartment[] = []
+  departmentForm: FormGroup = {} as FormGroup;
+  isFormVisible = signal<boolean>(false);
+  isEditMode = false;
+  departmentIdToDelete: string = ''
+
 
   getAllDepartments() {
     this.departmentService.GetAllDepartments().subscribe((res: IDepartment[]) => {
@@ -33,8 +38,48 @@ export class DepartmentComponent implements OnInit {
   }
 
   onSubmit() {
+    this.departmentService.CreateDepartment(this.departmentForm.value).subscribe((res: boolean) => {
+      if (res) {
+        alert("Department added successfully");
+        this.getAllDepartments();
+        this.isFormVisible.set(false);
+        this.departmentForm.reset();
+      } else {
+        alert("Failed to add department");
+      }
+    });
+  }
 
-    console.log(this.userForm.value);
+  onEdit(item: IDepartment) {
+    this.isFormVisible.set(true);
+    this.isEditMode = true;
+    this.departmentIdToDelete = item.id.toString()
+    this.departmentForm.patchValue({
+      DepartmentName: item.departmentName,
+      Logo: item.logo
+    });
+  }
 
+  onUpdate() {
+    this.departmentService.UpdateDepartment(this.departmentForm.value, this.departmentIdToDelete).subscribe((res: boolean) => {
+      this.isFormVisible.set(false)
+      alert("Project Updated")
+      this.getAllDepartments()
+      this.departmentForm.reset();
+      this.isEditMode = false
+    }, error => {
+      alert("Error while updating project")
+    })
+  }
+
+  onDelete(id: string) {
+    this.departmentService.DeleteDepartment(id).subscribe((res: boolean) => {
+      if (res) {
+        alert("Department deleted successfully");
+        this.getAllDepartments();
+      } else {
+        alert("Failed to delete department");
+      }
+    })
   }
 }

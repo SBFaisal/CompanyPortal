@@ -28,7 +28,7 @@
                 <select type="text" class="form-select" [(ngModel)]="projectObj.DepartmentId" name="DepartmentId">
                     <option selected> Select Department</option>
                     @for (item of departmentList(); track $index) {
-                    <option [value]="item.Id">{{item.DepartmentName}}</option>
+                    <option [value]="item.id">{{item.departmentName}}</option>
                     }
                 </select>
             </div>

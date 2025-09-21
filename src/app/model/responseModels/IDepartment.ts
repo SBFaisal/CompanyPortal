@@ -1,7 +1,7 @@
 export interface IDepartment{
-    Id: string
-    DepartmentName: string
-    Logo: string
+    id: string
+    departmentName: string
+    logo: string
 }
 
 
